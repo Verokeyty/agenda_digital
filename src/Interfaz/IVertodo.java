@@ -9,6 +9,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,12 +20,19 @@ import java.io.InputStream;
  */
 public class IVertodo extends javax.swing.JFrame {
 
-    String nombreArchivo= "Directorio";
+    DefaultTableModel modelo = new DefaultTableModel();
+    String ids[] = {"Nombre", "Primer apellido", "Segundo apellido", "Cédula", "Teléfono", "Correo electrónico"};
+
+    String nombreArchivo = "Directorio";
+
     public IVertodo() {
         initComponents();
-         setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
         setTitle("Ver todo los contactos");
-        setSize(600,500);
+        setSize(600, 500);
+        tabla1.setModel(modelo);
+        modelo.setColumnIdentifiers(ids);
+
     }
 
     /**
@@ -35,9 +46,10 @@ public class IVertodo extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         GUIvolver1 = new javax.swing.JButton();
-        GUItxtVertodo = new java.awt.TextArea();
         GUIVertodo = new javax.swing.JButton();
         GOrdenar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,36 +80,47 @@ public class IVertodo extends javax.swing.JFrame {
             }
         });
 
+        tabla1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tabla1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addComponent(GOrdenar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
                         .addComponent(GUIVertodo)
                         .addGap(66, 66, 66)
-                        .addComponent(GUIvolver1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(GUItxtVertodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(GUIvolver1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(GUItxtVertodo, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(GUIVertodo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(GUIvolver1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(GOrdenar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(19, 19, 19))
+                .addGap(31, 31, 31)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -119,52 +142,83 @@ public class IVertodo extends javax.swing.JFrame {
     }//GEN-LAST:event_GUIvolver1ActionPerformed
 
     private void GUIVertodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GUIVertodoActionPerformed
-        int elByte; 
-      String elmensaje = ""; 
-      //String tmp[]=new String[10]
-      //Registro r=new Registro();
-      
+        int elByte;
+        String elmensaje = "";
+        //String tmp[];
+        //Registro r=new Registro();
+        ArrayList registros=new ArrayList<Registro>();
         try {
-            InputStream entrada= new FileInputStream(nombreArchivo); 
-            try{
-               
-            while ((elByte= entrada.read())!=-1) {
-                /*
-                tmp=elByte.split(",");
+            InputStream entrada = new FileInputStream(nombreArchivo);
+            try {
+                //? 63
+                while ((elByte = entrada.read()) != -1) {
+                    
+                    /*
+                     tmp=elByte.split(",");
                 
-                SE AGREGA al JTABLE DESDE EL TMP
-                
-                */
-                
-              elmensaje+=(char)elByte;   
-            }
-            GUItxtVertodo.setText(elmensaje);
-            GUItxtVertodo.setEditable(false);
+                     SE AGREGA al JTABLE DESDE EL TMP
 
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-           }
-        }catch (IOException e){
+                    RespuestaEmpleado tmp=new RespuestaEmpleado();
+                tmp.setId(respuesta.getId());
+                //JOptionPane.showMessageDialog(null, tmp.getId());
+                modelo.addRow(new Object[]{String.valueOf(respuesta.getIdEncuesta()), respuesta.getId(), respuesta.getPreg1(), respuesta.getR1(), respuesta.getPreg2(), respuesta.getR2(), respuesta.getPreg3(), respuesta.getR3(), respuesta.getPreg4(), respuesta.getR4(), respuesta.getPreg5(), respuesta.getR5(), respuesta.getPreg6(), respuesta.getR6()});
+                 
+                    */
+
+                  // String contacto[] = linea.split("%");
+                   // JOptionPane.showMessageDialog(null,String.valueOf(elByte));
+                    elmensaje += (char) elByte;
+                    if(elByte == 63){
+                        //JOptionPane.showMessageDialog(null,elByte);
+                        String tmp[]=elmensaje.split(",");
+                //        JOptionPane.showMessageDialog(null, tmp[0]);
+                  //      JOptionPane.showMessageDialog(null, tmp[1]);
+                    //    JOptionPane.showMessageDialog(null, tmp[2]);
+                        Registro r=new Registro(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],tmp[5]);
+                        registros.add(r);
+                        elmensaje="";
+                    }
+                    
+                }
+                
+                for (int i = 0; i < registros.size(); i++) {
+                    Registro r=(Registro)registros.get(i);
+                    modelo.addRow(new Object[]{r.getNombre(),r.getApellido1(),r.getApellido2(),r.getCedula(),r.getTelefono(),r.getCorreo()});
+                }
+                
+                
+                
+               // JOptionPane.showMessageDialog(null,elmensaje);
+                //GUItxtVertodo.setText(elmensaje);
+                //GUItxtVertodo.setEditable(false);
+
+            } catch (FileNotFoundException e) {
+                System.out.println(e);
+            }
+        } catch (IOException e) {
             System.out.println(e);
         }
     }//GEN-LAST:event_GUIVertodoActionPerformed
 
     private void GOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GOrdenarActionPerformed
         // TODO add your handling code here:
-        
-        
+
+
     }//GEN-LAST:event_GOrdenarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton GOrdenar;
     private javax.swing.JButton GUIVertodo;
-    private java.awt.TextArea GUItxtVertodo;
     private javax.swing.JButton GUIvolver1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tabla1;
     // End of variables declaration//GEN-END:variables
 private void volverMenuPrincipal() {
         IMenu ventana = new IMenu();
         ventana.setVisible(true);
         this.setVisible(false);
-}}
+    }
+
+}
